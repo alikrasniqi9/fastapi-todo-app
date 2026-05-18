@@ -1,6 +1,6 @@
 ## Screenshot
 
-![App Screenshot](screenshot.png)
+![App Screenshot](Screenshot.png)
 
 Modern full-stack inventory/product management app built with FastAPI and React.
 
