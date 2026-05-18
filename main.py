@@ -1,10 +1,17 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from models import Product
 from config import session, engine
 import database_models
 from sqlalchemy.orm import Session
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:3000'],
+    allow_methods=["*"]
+)
 
 database_models.Base.metadata.create_all(bind=engine)
 
@@ -55,6 +62,7 @@ def update_product(id: int, product: Product, db: Session = Depends(get_db)):
         db_product.price = product.price
         db_product.quantity = product.quantity
         db.commit()
+        return db_product
         
     raise HTTPException(status_code=404, detail="Product not found")
 
@@ -64,5 +72,6 @@ def delete_product(id: int, db: Session = Depends(get_db)):
     if db_product:
         db.delete(db_product)
         db.commit()
+        return "Product Removed"
         
     raise HTTPException(status_code=404, detail="Product not found")
